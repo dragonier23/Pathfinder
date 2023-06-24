@@ -1,11 +1,9 @@
 <script setup>
-
+import Node from './components/Node.vue'
 </script>
 
 <template>
-<p>
-  hello!
-</p>
+<Node :row="1" :column="1"></Node>
 </template>
 
 <style scoped>
