@@ -9,12 +9,13 @@ const props = defineProps({
   row: Number,
   column: Number,
   isStartNode: Boolean,
-  isEndNode: Boolean
+  isEndNode: Boolean,
+  isWallNode: Boolean
 })
 
 //sends back whether it is the start or end node, and sends back the row and column associated with the node
 const clickResponse = () => {
-  emit('nodeClick', props.isStartNode, props.isEndNode, props.row, props.column)
+  emit('nodeClick', props.isStartNode, props.isEndNode, props.isWallNode, props.row, props.column)
 }
 
 const hoverResponse = () => {
@@ -24,7 +25,12 @@ const hoverResponse = () => {
 
 <template>
   <div
-    :class="[squareClass, { startNode: isStartNode }, { endNode: isEndNode }]"
+    :class="[
+      squareClass,
+      { startNode: isStartNode },
+      { endNode: isEndNode },
+      { wallNode: isWallNode }
+    ]"
     @click="clickResponse"
     @mouseover="hoverResponse"
   ></div>
@@ -44,5 +50,9 @@ const hoverResponse = () => {
 
 .endNode {
   background-color: red;
+}
+
+.wallNode {
+  background-color: black;
 }
 </style>

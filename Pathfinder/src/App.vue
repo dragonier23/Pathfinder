@@ -1,56 +1,85 @@
 <script setup>
 import Node from './components/Node.vue'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 
-const verticalCount = window.innerHeight / 40 - 3
-const horizontalCount = 12 //window.innerWidth / 40;
+const verticalCount = window.innerHeight / 40 - 1;
+const horizontalCount = window.innerWidth / 40 - 2;
+
+//create grid
+const grid = []
+for (var row = 0; row < verticalCount; row++) {
+  const rowGrid = [];
+  for (var column = 0; column < horizontalCount; column++) {
+    rowGrid.push([]);
+  }
+  grid.push(rowGrid);
+}
 
 //initiatilize some sort of control over the start and end
 const startRow = ref(2)
 const startColumn = ref(3)
 const endRow = ref(13)
-const endColumn = ref(horizontalCount - 4)
+const endColumn = ref(15)
 
-//help decide if is moving start or moving end
-const moveStart = ref(false)
-const moveEnd = ref(false)
+//log wall positions
+const wallList = ref([])
 
-//create grid
-const grid = []
-for (var row = 0; row < verticalCount; row++) {
-  const rowGrid = []
-  for (var column = 0; column < horizontalCount; column++) {
-    rowGrid.push([])
-  }
-  grid.push(rowGrid)
+//function to check if the node is or is not a wall
+function checkWall(rowIndex, columnIndex) {
+    const length = wallList.value.length 
+    for (var entry = 0; entry < length; entry++){
+      const wallEntry = wallList.value[entry];
+      if (wallEntry[0] === rowIndex && wallEntry[1] === columnIndex){
+        return true 
+      }
+    }
+    return false
 }
 
 //so, first on mouse down: 1. this will trigger a function, that first decides:
 // are we moving a start or end node - emitted event from child Node --> send if isStartNode or isEndNode is true + row and column number
 // next it decides: are we setting it down, or picking it up
-
 //so if picking up, we try to locate where the mouse is by listening to the hover event over the particular node, which does the same thing as the click event except it just keeps running
-
 //if putting down, we take the click event, and use the emitted row and column thing to set the startRow/endRow to the newly chosen thing
-
 //triggers the moving process
-function nodeClicked(isStartNode, isEndNode, row, column) {
-  if (moveEnd.value) {
-    moveEnd.value = !moveEnd.value
-    endRow.value = row
-    endColumn.value = column
-  } else if (!moveEnd.value) {
-    if (isEndNode) {
-      moveEnd.value = !moveEnd.value
-    }
-  } else if (moveStart.value) {
-    moveStart.value = !moveStart.value
-    startRow.value = row
-    startColumn.value = column
-  } else if (!moveStart.value) {
-    if (isStartNode) {
+//help decide if is moving start or moving end
+const moveStart = ref(false)
+const moveEnd = ref(false)
+
+function nodeClicked(isStartNode, isEndNode, isWallNode, row, column) {
+  //first 2 help to move the start and end node
+  if (isStartNode) {
+    if (!moveStart.value) {
       moveStart.value = !moveStart.value
+    } else {
+      moveStart.value = !moveStart.value
+      startRow.value = row
+      startColumn.value = column
     }
+  } else if (isEndNode) {
+    if (!moveEnd.value) {
+      moveEnd.value = !moveEnd.value
+    } else {
+      moveEnd.value = !moveEnd.value
+      endRow.value = row
+      endColumn.value = column
+    }
+  }
+  // we want to add walls: so if we click a node, and it isnt a start or end node, we should turn
+  //it into a wall node: --> this node needs to be added to a list of known walls, then the color needs to be changed
+  else if (isWallNode){
+    //filter out the entry that we want to remove
+    wallList.value = wallList.value.filter( (currentValue, index, array) => {
+      const wallEntry = wallList.value[index];
+      if (wallEntry[0] === row && wallEntry[1] === column){
+          return false 
+      }
+    return true
+    })
+  }
+  // if not a wall node, clicking it turns it into a wallNode
+  else{
+    wallList.value.push([row, column]);
   }
 }
 
@@ -76,6 +105,7 @@ function nodeHover(row, column) {
           :column="columnIndex"
           :isStartNode="true"
           :isEndNode="false"
+          :isWallNode="false"
           @nodeClick="nodeClicked"
           @nodeHover="nodeHover"
         />
@@ -85,6 +115,17 @@ function nodeHover(row, column) {
           :column="columnIndex"
           :isStartNode="false"
           :isEndNode="true"
+          :isWallNode="false"
+          @nodeClick="nodeClicked"
+          @nodeHover="nodeHover"
+        />
+        <Node
+          v-else-if="checkWall(rowIndex, columnIndex)"
+          :row="rowIndex"
+          :column="columnIndex"
+          :isStartNode="false"
+          :isEndNode="false"
+          :isWallNode="true"
           @nodeClick="nodeClicked"
           @nodeHover="nodeHover"
         />
@@ -94,6 +135,7 @@ function nodeHover(row, column) {
           :column="columnIndex"
           :isStartNode="false"
           :isEndNode="false"
+          :isWallNode="false"
           @nodeClick="nodeClicked"
           @nodeHover="nodeHover"
         />
