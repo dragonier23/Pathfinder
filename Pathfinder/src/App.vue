@@ -2,17 +2,17 @@
 import Node from './components/Node.vue'
 import { ref, reactive } from 'vue'
 
-const verticalCount = window.innerHeight / 40 - 1;
-const horizontalCount = window.innerWidth / 40 - 2;
+const verticalCount = window.innerHeight / 40 - 1
+const horizontalCount = window.innerWidth / 40 - 2
 
 //create grid
 const grid = []
 for (var row = 0; row < verticalCount; row++) {
-  const rowGrid = [];
+  const rowGrid = []
   for (var column = 0; column < horizontalCount; column++) {
-    rowGrid.push([]);
+    rowGrid.push([])
   }
-  grid.push(rowGrid);
+  grid.push(rowGrid)
 }
 
 //initiatilize some sort of control over the start and end
@@ -26,14 +26,14 @@ const wallList = ref([])
 
 //function to check if the node is or is not a wall
 function checkWall(rowIndex, columnIndex) {
-    const length = wallList.value.length 
-    for (var entry = 0; entry < length; entry++){
-      const wallEntry = wallList.value[entry];
-      if (wallEntry[0] === rowIndex && wallEntry[1] === columnIndex){
-        return true 
-      }
+  const length = wallList.value.length
+  for (var entry = 0; entry < length; entry++) {
+    const wallEntry = wallList.value[entry]
+    if (wallEntry[0] === rowIndex && wallEntry[1] === columnIndex) {
+      return true
     }
-    return false
+  }
+  return false
 }
 
 //so, first on mouse down: 1. this will trigger a function, that first decides:
@@ -67,19 +67,19 @@ function nodeClicked(isStartNode, isEndNode, isWallNode, row, column) {
   }
   // we want to add walls: so if we click a node, and it isnt a start or end node, we should turn
   //it into a wall node: --> this node needs to be added to a list of known walls, then the color needs to be changed
-  else if (isWallNode){
+  else if (isWallNode) {
     //filter out the entry that we want to remove
-    wallList.value = wallList.value.filter( (currentValue, index, array) => {
-      const wallEntry = wallList.value[index];
-      if (wallEntry[0] === row && wallEntry[1] === column){
-          return false 
+    wallList.value = wallList.value.filter((currentValue, index, array) => {
+      const wallEntry = wallList.value[index]
+      if (wallEntry[0] === row && wallEntry[1] === column) {
+        return false
       }
-    return true
+      return true
     })
   }
   // if not a wall node, clicking it turns it into a wallNode
-  else{
-    wallList.value.push([row, column]);
+  else {
+    wallList.value.push([row, column])
   }
 }
 

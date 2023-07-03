@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 const squareClass = ref('square')
 
-const emit = defineEmits(['nodeClick', 'nodeHover'])
+const emit = defineEmits(['nodeClick', 'nodeHover', 'nodeMouseDown', 'noseMouseUp'])
 
 const props = defineProps({
   row: Number,
