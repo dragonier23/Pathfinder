@@ -1,12 +1,13 @@
 <script setup>
 import Node from './components/Node.vue'
 import { ref, reactive } from 'vue'
+import { dijkstra } from './djikstras';
 
 const verticalCount = window.innerHeight / 40 - 1
 const horizontalCount = window.innerWidth / 40 - 2
 
 //create grid
-const grid = []
+const   grid = []
 for (var row = 0; row < verticalCount; row++) {
   const rowGrid = []
   for (var column = 0; column < horizontalCount; column++) {
