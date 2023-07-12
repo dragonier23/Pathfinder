@@ -1,13 +1,13 @@
 <script setup>
 import Node from './components/Node.vue'
 import { ref, reactive } from 'vue'
-import { dijkstra } from './djikstras';
+import { dijkstra, getShortestPath } from './djikstras'
 
 const verticalCount = window.innerHeight / 40 - 1
-const horizontalCount = window.innerWidth / 40 - 2
+const horizontalCount = window.innerWidth / 40 - 3
 
 //create grid
-const   grid = []
+const grid = []
 for (var row = 0; row < verticalCount; row++) {
   const rowGrid = []
   for (var column = 0; column < horizontalCount; column++) {
@@ -94,9 +94,20 @@ function nodeHover(row, column) {
     endColumn.value = column
   }
 }
+
+const output = ref(null);
+//handle clicked event for button triggering the djikstra's algorithm
+function runalgo(){
+  const visitedNodesinOrder = dijkstra(1, 1, 10, 10, [], verticalCount, horizontalCount)
+  output.value = getShortestPath(visitedNodesinOrder).pop()
+}
 </script>
 
 <template>
+  <div>
+    <button type="button" @click="runalgo"> Trigger algorithm </button>
+    <p> {{ output }}</p>
+  </div>
   <div class="centered">
     <div v-for="(row, rowIndex) in grid" :row="rowIndex" class="row">
       <template v-for="(column, columnIndex) in row">
