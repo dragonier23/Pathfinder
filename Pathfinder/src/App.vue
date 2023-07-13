@@ -95,18 +95,18 @@ function nodeHover(row, column) {
   }
 }
 
-const output = ref(null);
+const output = ref(null)
 //handle clicked event for button triggering the djikstra's algorithm
-function runalgo(){
-  const visitedNodesinOrder = dijkstra(1, 1, 10, 10, [], verticalCount, horizontalCount)
+function runalgo() {
+  const visitedNodesinOrder = dijkstra(startRow.value, startColumn.value, endRow.value, endColumn.value, wallList.value, verticalCount, horizontalCount)
   output.value = getShortestPath(visitedNodesinOrder).pop()
 }
 </script>
 
 <template>
   <div>
-    <button type="button" @click="runalgo"> Trigger algorithm </button>
-    <p> {{ output }}</p>
+    <button type="button" @click="runalgo">Trigger algorithm</button>
+    <p>{{ output }}</p>
   </div>
   <div class="centered">
     <div v-for="(row, rowIndex) in grid" :row="rowIndex" class="row">
