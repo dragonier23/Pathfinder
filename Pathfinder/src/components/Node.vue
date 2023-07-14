@@ -33,7 +33,7 @@ const hoverResponse = () => {
       { endNode: isEndNode },
       { wallNode: isWallNode },
       { visitedNode: isVisited },
-      { shortestPath: isShortest}
+      { shortestPath: isShortest }
     ]"
     @click="clickResponse"
     @mouseover="hoverResponse"

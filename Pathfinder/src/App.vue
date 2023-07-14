@@ -106,26 +106,27 @@ function runalgo() {
     wallList.value,
     verticalCount,
     horizontalCount
-  );
-  const shortestPath = getShortestPath(visitedNodesinOrder);
-  output.value = getShortestPath(visitedNodesinOrder).pop();
-  animateVisit(visitedNodesinOrder, shortestPath);
+  )
+  const shortestPath = getShortestPath(visitedNodesinOrder)
+  output.value = getShortestPath(visitedNodesinOrder).pop()
+  animateVisit(visitedNodesinOrder, shortestPath)
 }
 
 //animate the visiting of nodes
 const visitedList = ref([])
 function animateVisit(visitedNodesinOrder, shortestPath) {
   //iterate through the visitedNodesinOrder, and change the color of the square
-  for (var i = 0; i <= visitedNodesinOrder.length; i++){
-    if (i === visitedNodesinOrder.length){
-      setTimeout(animatedShortestPath(shortestPath), 5 * i);
-    }
-    else{
-      const node = visitedNodesinOrder[i];
+  visitedList.value = []
+  shortestPathList.value = []
+  for (var i = 0; i <= visitedNodesinOrder.length; i++) {
+    if (i === visitedNodesinOrder.length) {
+      setTimeout(animatedShortestPath(shortestPath), 5 * i)
+    } else {
+      const node = visitedNodesinOrder[i]
       setTimeout(() => {
-        const { row, column } = node;
-        visitedList.value.push([row, column]);
-      }, 1);
+        const { row, column } = node
+        visitedList.value.push([row, column])
+      }, 0.4)
     }
   }
 }
@@ -142,16 +143,15 @@ function checkVisited(rowIndex, columnIndex) {
   return false
 }
 
-
 //animate the shortest path
 const shortestPathList = ref([])
-function animatedShortestPath(shortestPath){
-  for (var i = 0; i < shortestPath.length; i++){
-    const node = shortestPath[i];
+function animatedShortestPath(shortestPath) {
+  for (var i = 0; i < shortestPath.length; i++) {
+    const node = shortestPath[i]
     setTimeout(() => {
-      const { row, column } = node;
-      shortestPathList.value.push([row, column]);
-    }, 10);
+      const { row, column } = node
+      shortestPathList.value.push([row, column])
+    }, 0.4)
   }
 }
 //function to help update the DOM for the visited nodes
