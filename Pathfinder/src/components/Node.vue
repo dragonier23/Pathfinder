@@ -10,7 +10,9 @@ const props = defineProps({
   column: Number,
   isStartNode: Boolean,
   isEndNode: Boolean,
-  isWallNode: Boolean
+  isWallNode: Boolean,
+  isVisited: Boolean,
+  isShortest: Boolean
 })
 
 //sends back whether it is the start or end node, and sends back the row and column associated with the node
@@ -29,7 +31,9 @@ const hoverResponse = () => {
       squareClass,
       { startNode: isStartNode },
       { endNode: isEndNode },
-      { wallNode: isWallNode }
+      { wallNode: isWallNode },
+      { visitedNode: isVisited },
+      { shortestPath: isShortest}
     ]"
     @click="clickResponse"
     @mouseover="hoverResponse"
@@ -54,5 +58,13 @@ const hoverResponse = () => {
 
 .wallNode {
   background-color: black;
+}
+
+.visitedNode {
+  background-color: #5dd1f5;
+}
+
+.shortestPath {
+  background-color: yellow;
 }
 </style>

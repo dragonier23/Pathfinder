@@ -161,7 +161,6 @@ function getUnvisitedNeighbours(currentNode, grid) {
   if (row < grid.length - 1) unvisitedNodes.push(grid[row + 1][column])
   if (column > 0) unvisitedNodes.push(grid[row][column - 1])
   if (column < grid[0].length - 1) unvisitedNodes.push(grid[row][column + 1])
-  console.log(unvisitedNodes)
   return unvisitedNodes.filter((node) => !node.isVisited)
 }
 

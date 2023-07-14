@@ -98,8 +98,72 @@ function nodeHover(row, column) {
 const output = ref(null)
 //handle clicked event for button triggering the djikstra's algorithm
 function runalgo() {
-  const visitedNodesinOrder = dijkstra(startRow.value, startColumn.value, endRow.value, endColumn.value, wallList.value, verticalCount, horizontalCount)
-  output.value = getShortestPath(visitedNodesinOrder).pop()
+  const visitedNodesinOrder = dijkstra(
+    startRow.value,
+    startColumn.value,
+    endRow.value,
+    endColumn.value,
+    wallList.value,
+    verticalCount,
+    horizontalCount
+  );
+  const shortestPath = getShortestPath(visitedNodesinOrder);
+  output.value = getShortestPath(visitedNodesinOrder).pop();
+  animateVisit(visitedNodesinOrder, shortestPath);
+}
+
+//animate the visiting of nodes
+const visitedList = ref([])
+function animateVisit(visitedNodesinOrder, shortestPath) {
+  //iterate through the visitedNodesinOrder, and change the color of the square
+  for (var i = 0; i <= visitedNodesinOrder.length; i++){
+    if (i === visitedNodesinOrder.length){
+      setTimeout(animatedShortestPath(shortestPath), 5 * i);
+    }
+    else{
+      const node = visitedNodesinOrder[i];
+      setTimeout(() => {
+        const { row, column } = node;
+        visitedList.value.push([row, column]);
+      }, 1);
+    }
+  }
+}
+
+//function to help update the DOM for the visited nodes
+function checkVisited(rowIndex, columnIndex) {
+  const length = visitedList.value.length
+  for (var entry = 0; entry < length; entry++) {
+    const visitedEntry = visitedList.value[entry]
+    if (visitedEntry[0] === rowIndex && visitedEntry[1] === columnIndex) {
+      return true
+    }
+  }
+  return false
+}
+
+
+//animate the shortest path
+const shortestPathList = ref([])
+function animatedShortestPath(shortestPath){
+  for (var i = 0; i < shortestPath.length; i++){
+    const node = shortestPath[i];
+    setTimeout(() => {
+      const { row, column } = node;
+      shortestPathList.value.push([row, column]);
+    }, 10);
+  }
+}
+//function to help update the DOM for the visited nodes
+function checkShortest(rowIndex, columnIndex) {
+  const length = shortestPathList.value.length
+  for (var entry = 0; entry < length; entry++) {
+    const shortestPathEntry = shortestPathList.value[entry]
+    if (shortestPathEntry[0] === rowIndex && shortestPathEntry[1] === columnIndex) {
+      return true
+    }
+  }
+  return false
 }
 </script>
 
@@ -118,6 +182,8 @@ function runalgo() {
           :isStartNode="true"
           :isEndNode="false"
           :isWallNode="false"
+          :isVisited="false"
+          :isShortest="false"
           @nodeClick="nodeClicked"
           @nodeHover="nodeHover"
         />
@@ -128,6 +194,8 @@ function runalgo() {
           :isStartNode="false"
           :isEndNode="true"
           :isWallNode="false"
+          :isVisited="false"
+          :isShortest="false"
           @nodeClick="nodeClicked"
           @nodeHover="nodeHover"
         />
@@ -138,6 +206,32 @@ function runalgo() {
           :isStartNode="false"
           :isEndNode="false"
           :isWallNode="true"
+          :isVisited="false"
+          :isShortest="false"
+          @nodeClick="nodeClicked"
+          @nodeHover="nodeHover"
+        />
+        <Node
+          v-else-if="checkShortest(rowIndex, columnIndex)"
+          :row="rowIndex"
+          :column="columnIndex"
+          :isStartNode="false"
+          :isEndNode="false"
+          :isWallNode="false"
+          :isVisited="false"
+          :isShortest="true"
+          @nodeClick="nodeClicked"
+          @nodeHover="nodeHover"
+        />
+        <Node
+          v-else-if="checkVisited(rowIndex, columnIndex)"
+          :row="rowIndex"
+          :column="columnIndex"
+          :isStartNode="false"
+          :isEndNode="false"
+          :isWallNode="false"
+          :isVisited="true"
+          :isShortest="false"
           @nodeClick="nodeClicked"
           @nodeHover="nodeHover"
         />
@@ -148,6 +242,8 @@ function runalgo() {
           :isStartNode="false"
           :isEndNode="false"
           :isWallNode="false"
+          :isVisited="false"
+          :isShortest="false"
           @nodeClick="nodeClicked"
           @nodeHover="nodeHover"
         />
