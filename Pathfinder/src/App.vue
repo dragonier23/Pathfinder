@@ -96,7 +96,7 @@ function nodeHover(row, column) {
 }
 
 //give control for which algorithm we are using
-const pathfindingalgo = ref("djikstra")
+const pathfindingalgo = ref('djikstra')
 
 //give ability to select if diagonals should be triggered
 const isDiagonal = ref(false) //by default diagonals not allowed
@@ -104,8 +104,8 @@ const isDiagonal = ref(false) //by default diagonals not allowed
 //handle clicked event for button triggering the djikstra's algorithm
 function runalgo() {
   var visitedNodesinOrder = []
-  if (pathfindingalgo.value === "djikstra"){
-      visitedNodesinOrder = dijkstra(
+  if (pathfindingalgo.value === 'djikstra') {
+    visitedNodesinOrder = dijkstra(
       startRow.value,
       startColumn.value,
       endRow.value,
@@ -115,9 +115,8 @@ function runalgo() {
       horizontalCount,
       isDiagonal.value
     )
-  }
-  else if (pathfindingalgo.value === "astar"){
-      visitedNodesinOrder = astar(
+  } else if (pathfindingalgo.value === 'astar') {
+    visitedNodesinOrder = astar(
       startRow.value,
       startColumn.value,
       endRow.value,
@@ -191,11 +190,11 @@ function checkShortest(rowIndex, columnIndex) {
   <div>
     <div>
       <select v-model="pathfindingalgo">
-      <option disabled value="">Please select one</option>
+        <option disabled value="">Please select one</option>
         <option value="djikstra">Djikstra</option>
         <option value="astar">A*</option>
       </select>
-      <input type="checkbox" id="diagonalCheck" v-model="isDiagonal">
+      <input type="checkbox" id="diagonalCheck" v-model="isDiagonal" />
       <label v-if="isDiagonal" for="diagonalCheck">Diagonals Allowed</label>
       <label v-else for="diagonalCheck">Diagonals Not Allowed</label>
     </div>
