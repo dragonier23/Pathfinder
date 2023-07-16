@@ -1,7 +1,7 @@
 <script setup>
 import Node from './components/Node.vue'
 import { ref, reactive } from 'vue'
-import { dijkstra, getShortestPath } from './djikstras'
+import { dijkstra, getShortestPath, astar } from './pathfindingalgos'
 
 const verticalCount = window.innerHeight / 40 - 1
 const horizontalCount = window.innerWidth / 40 - 3
@@ -95,20 +95,40 @@ function nodeHover(row, column) {
   }
 }
 
-const output = ref(null)
+//give control for which algorithm we are using
+const pathfindingalgo = ref("djikstra")
+
+//give ability to select if diagonals should be triggered
+const isDiagonal = ref(false) //by default diagonals not allowed
+
 //handle clicked event for button triggering the djikstra's algorithm
 function runalgo() {
-  const visitedNodesinOrder = dijkstra(
-    startRow.value,
-    startColumn.value,
-    endRow.value,
-    endColumn.value,
-    wallList.value,
-    verticalCount,
-    horizontalCount
-  )
+  var visitedNodesinOrder = []
+  if (pathfindingalgo.value === "djikstra"){
+      visitedNodesinOrder = dijkstra(
+      startRow.value,
+      startColumn.value,
+      endRow.value,
+      endColumn.value,
+      wallList.value,
+      verticalCount,
+      horizontalCount,
+      isDiagonal.value
+    )
+  }
+  else if (pathfindingalgo.value === "astar"){
+      visitedNodesinOrder = astar(
+      startRow.value,
+      startColumn.value,
+      endRow.value,
+      endColumn.value,
+      wallList.value,
+      verticalCount,
+      horizontalCount,
+      isDiagonal.value
+    )
+  }
   const shortestPath = getShortestPath(visitedNodesinOrder)
-  output.value = getShortestPath(visitedNodesinOrder).pop()
   animateVisit(visitedNodesinOrder, shortestPath)
 }
 
@@ -169,8 +189,17 @@ function checkShortest(rowIndex, columnIndex) {
 
 <template>
   <div>
+    <div>
+      <select v-model="pathfindingalgo">
+      <option disabled value="">Please select one</option>
+        <option value="djikstra">Djikstra</option>
+        <option value="astar">A*</option>
+      </select>
+      <input type="checkbox" id="diagonalCheck" v-model="isDiagonal">
+      <label v-if="isDiagonal" for="diagonalCheck">Diagonals Allowed</label>
+      <label v-else for="diagonalCheck">Diagonals Not Allowed</label>
+    </div>
     <button type="button" @click="runalgo">Trigger algorithm</button>
-    <p>{{ output }}</p>
   </div>
   <div class="centered">
     <div v-for="(row, rowIndex) in grid" :row="rowIndex" class="row">
