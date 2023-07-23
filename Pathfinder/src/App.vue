@@ -2,9 +2,10 @@
 import Node from './components/Node.vue'
 import { ref, reactive } from 'vue'
 import { dijkstra, getShortestPath, astar } from './pathfindingalgos'
+import { generateMaze } from './mazealgos'
 
-const verticalCount = window.innerHeight / 40 - 1
-const horizontalCount = window.innerWidth / 40 - 3
+const verticalCount = 35//Math.floor(window.innerHeight / 40) - 1
+const horizontalCount = 35//Math.floor(window.innerWidth / 40) - 2
 
 //create grid
 const grid = []
@@ -102,7 +103,7 @@ const pathfindingalgo = ref('djikstra')
 const isDiagonal = ref(false) //by default diagonals not allowed
 
 //handle clicked event for button triggering the djikstra's algorithm
-function runalgo() {
+function runPathfindingAlgo() {
   var visitedNodesinOrder = []
   if (pathfindingalgo.value === 'djikstra') {
     visitedNodesinOrder = dijkstra(
@@ -184,6 +185,11 @@ function checkShortest(rowIndex, columnIndex) {
   }
   return false
 }
+
+//function to help with generation of maze
+function runMazeAlgo() {
+  wallList.value = generateMaze(horizontalCount, verticalCount)
+}
 </script>
 
 <template>
@@ -198,7 +204,8 @@ function checkShortest(rowIndex, columnIndex) {
       <label v-if="isDiagonal" for="diagonalCheck">Diagonals Allowed</label>
       <label v-else for="diagonalCheck">Diagonals Not Allowed</label>
     </div>
-    <button type="button" @click="runalgo">Trigger algorithm</button>
+    <button type="button" @click="runPathfindingAlgo">Trigger algorithm</button>
+    <button type="button" @click="runMazeAlgo">Generate Maze</button>
   </div>
   <div class="centered">
     <div v-for="(row, rowIndex) in grid" :row="rowIndex" class="row">
