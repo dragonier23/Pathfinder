@@ -203,8 +203,8 @@ function sortUnvisitedNodesDijkstra(unvisitedNodes) {
 
 function updateUnvisitedNodes(currentNode, grid, endRow, endColumn, isDiagonal) {
   //here, we need to update the adjacent unvisited nodes. We of course first need to retrieve them.
-  const unvisitedNeighbours = getUnvisitedNeighbours(currentNode, grid, isDiagonal)
-  for (const neighbour of unvisitedNeighbours) {
+  const unvisitedHorizontalNeighbours = getUnvisitedHorizontalNeighbours(currentNode, grid)
+  for (const neighbour of unvisitedHorizontalNeighbours) {
     //following 2 lines only apply to astar, not djikstra's
     const { row, column } = neighbour
     const estimateToGo = Math.abs(row - endRow) + Math.abs(column - endColumn)
@@ -215,23 +215,40 @@ function updateUnvisitedNodes(currentNode, grid, endRow, endColumn, isDiagonal) 
       neighbour.previousNode = currentNode
     }
   }
+  if (isDiagonal) {
+    const unvisitedDiagonalNeighbours = getUnvisitedDiagonalNeighbours(currentNode, grid)
+    for (const neighbour of unvisitedDiagonalNeighbours) {
+      //following 2 lines only apply to astar, not djikstra's
+      const { row, column } = neighbour
+      const estimateToGo = Math.abs(row - endRow) + Math.abs(column - endColumn)
+      if (neighbour.distance > currentNode.distance + 1.4142135624) {
+        neighbour.distance = currentNode.distance + 1.4142135624
+        //following line only apply to astar, not djikstra's
+        neighbour.heuristicDistance = currentNode.distance + 1.4142135624 + estimateToGo
+        neighbour.previousNode = currentNode
+      }
+    }
+  }
 }
 
-function getUnvisitedNeighbours(currentNode, grid, isDiagonal) {
+function getUnvisitedHorizontalNeighbours(currentNode, grid) {
   const unvisitedNodes = []
   const { column, row } = currentNode
   if (row > 0) unvisitedNodes.push(grid[row - 1][column])
   if (row < grid.length - 1) unvisitedNodes.push(grid[row + 1][column])
   if (column > 0) unvisitedNodes.push(grid[row][column - 1])
   if (column < grid[0].length - 1) unvisitedNodes.push(grid[row][column + 1])
-  if (isDiagonal) {
-    if (row > 0 && column > 0) unvisitedNodes.push(grid[row - 1][column - 1])
-    if (row > 0 && column < grid[0].length - 1) unvisitedNodes.push(grid[row - 1][column + 1])
-    if (row < grid.length - 1 && column > 1) unvisitedNodes.push(grid[row + 1][column - 1])
-    if (row < grid.length - 1 && column < grid[0].length - 1) {
-      unvisitedNodes.push(grid[row + 1][column + 1])
-    }
-  }
+  return unvisitedNodes.filter((node) => !node.isVisited)
+}
+
+function getUnvisitedDiagonalNeighbours(currentNode, grid) {
+  const unvisitedNodes = []
+  const { column, row } = currentNode
+  if (row > 0 && column > 0) unvisitedNodes.push(grid[row - 1][column - 1])
+  if (row > 0 && column < grid[0].length - 1) unvisitedNodes.push(grid[row - 1][column + 1])
+  if (row < grid.length - 1 && column > 1) unvisitedNodes.push(grid[row + 1][column - 1])
+  if (row < grid.length - 1 && column < grid[0].length - 1)
+    unvisitedNodes.push(grid[row + 1][column + 1])
   return unvisitedNodes.filter((node) => !node.isVisited)
 }
 

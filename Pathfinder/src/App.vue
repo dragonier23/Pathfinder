@@ -4,8 +4,8 @@ import { ref, reactive } from 'vue'
 import { dijkstra, getShortestPath, astar } from './pathfindingalgos'
 import { generateMaze } from './mazealgos'
 
-const verticalCount = 35//Math.floor(window.innerHeight / 40) - 1
-const horizontalCount = 35//Math.floor(window.innerWidth / 40) - 2
+const verticalCount = 15 //Math.floor(window.innerHeight / 40) - 1
+const horizontalCount = 35 //Math.floor(window.innerWidth / 40) - 2
 
 //create grid
 const grid = []
@@ -100,7 +100,7 @@ function nodeHover(row, column) {
 const pathfindingalgo = ref('djikstra')
 
 //give ability to select if diagonals should be triggered
-const isDiagonal = ref(false) //by default diagonals not allowed
+const pathfinderDiagonal = ref(false) //by default diagonals not allowed
 
 //handle clicked event for button triggering the djikstra's algorithm
 function runPathfindingAlgo() {
@@ -114,7 +114,7 @@ function runPathfindingAlgo() {
       wallList.value,
       verticalCount,
       horizontalCount,
-      isDiagonal.value
+      pathfinderDiagonal.value
     )
   } else if (pathfindingalgo.value === 'astar') {
     visitedNodesinOrder = astar(
@@ -125,7 +125,7 @@ function runPathfindingAlgo() {
       wallList.value,
       verticalCount,
       horizontalCount,
-      isDiagonal.value
+      pathfinderDiagonal.value
     )
   }
   const shortestPath = getShortestPath(visitedNodesinOrder)
@@ -186,9 +186,12 @@ function checkShortest(rowIndex, columnIndex) {
   return false
 }
 
+const solveDiagonal = ref(false)
 //function to help with generation of maze
 function runMazeAlgo() {
-  wallList.value = generateMaze(horizontalCount, verticalCount)
+  visitedList.value = []
+  shortestPathList.value = []
+  wallList.value = generateMaze(horizontalCount, verticalCount, solveDiagonal.value)
 }
 </script>
 
@@ -200,9 +203,16 @@ function runMazeAlgo() {
         <option value="djikstra">Djikstra</option>
         <option value="astar">A*</option>
       </select>
-      <input type="checkbox" id="diagonalCheck" v-model="isDiagonal" />
-      <label v-if="isDiagonal" for="diagonalCheck">Diagonals Allowed</label>
-      <label v-else for="diagonalCheck">Diagonals Not Allowed</label>
+      <input type="checkbox" id="pathfinderDiagonalCheck" v-model="pathfinderDiagonal" />
+      <label v-if="pathfinderDiagonal" for="pathfinderDiagonalCheck">Diagonals Allowed</label>
+      <label v-else for="pathfinderDiagonalCheck">Diagonals Not Allowed</label>
+      <div>
+        <input type="checkbox" id="mazeDiagonalCheck" v-model="solveDiagonal" />
+        <label v-if="solveDiagonal" for="mazeDiagonalCheck"
+          >Maze may only be solved with diagonals allowed</label
+        >
+        <label v-else for="mazeDiagonalCheck">Maze is solvable without diagonals allowed</label>
+      </div>
     </div>
     <button type="button" @click="runPathfindingAlgo">Trigger algorithm</button>
     <button type="button" @click="runMazeAlgo">Generate Maze</button>
