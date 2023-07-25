@@ -35,8 +35,6 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-      - name: Enter correct Directory
-        run: cd pathfinder
       - name: Install dependencies
         run: npm install
       - name: Build
