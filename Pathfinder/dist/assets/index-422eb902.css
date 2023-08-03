@@ -1,0 +1,1 @@
+.square{height:40px;width:40px;display:inline-block;border:1px solid grey}.startNode{background-color:green}.endNode{background-color:red}.wallNode{background-color:#000}.visitedNode{background-color:#5dd1f5}.shortestPath{background-color:#ff0}.row{height:40px}.centered{margin:auto}
