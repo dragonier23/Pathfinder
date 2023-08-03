@@ -218,7 +218,7 @@ function runMazeAlgo() {
     <button type="button" @click="runMazeAlgo">Generate Maze</button>
   </div>
   <div class="centered">
-    <div v-for="(row, rowIndex) in grid" :row="rowIndex" class="row">
+    <div v-for="(row, rowIndex) in grid" :row="rowIndex" class="row centered" :width="(horizontalCount * 40)">
       <template v-for="(column, columnIndex) in row">
         <Node
           v-if="rowIndex === startRow && columnIndex === startColumn"
@@ -303,5 +303,6 @@ function runMazeAlgo() {
 }
 .centered {
   margin: auto;
+  width: 100%;
 }
 </style>
