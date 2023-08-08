@@ -31,7 +31,7 @@ export function astar(
   const visitedNodesinOrder = []
   //next, we initialise an array of the possible, unvisited nodes
   const unvisitedNodes = getGridList(grid)
-  while (!!unvisitedNodes) {
+  while (unvisitedNodes) {
     sortUnvisitedNodesAStar(unvisitedNodes)
     const currentNode = unvisitedNodes.shift()
     //if the currentNode is a wall, ignore
@@ -83,7 +83,7 @@ export function dijkstra(
   const visitedNodesinOrder = []
   //next, we initialise an array of the possible, unvisited nodes
   const unvisitedNodes = getGridList(grid)
-  while (!!unvisitedNodes) {
+  while (unvisitedNodes) {
     sortUnvisitedNodesDijkstra(unvisitedNodes)
     const currentNode = unvisitedNodes.shift()
     //if the currentNode is a wall, ignore

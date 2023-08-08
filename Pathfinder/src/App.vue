@@ -4,8 +4,8 @@ import { ref, reactive } from 'vue'
 import { dijkstra, getShortestPath, astar } from './pathfindingalgos'
 import { generateMaze } from './mazealgos'
 
-const verticalCount = 15 //Math.floor(window.innerHeight / 40) - 1
-const horizontalCount = 35 //Math.floor(window.innerWidth / 40) - 2
+const verticalCount = Math.floor(Math.floor(window.innerHeight / 40) / 2) * 2 - 3
+const horizontalCount = Math.floor(Math.floor(window.innerWidth / 40) / 2) * 2 - 3
 
 //create grid
 const grid = []
@@ -18,10 +18,10 @@ for (var row = 0; row < verticalCount; row++) {
 }
 
 //initiatilize some sort of control over the start and end
-const startRow = ref(2)
+const startRow = ref(8)
 const startColumn = ref(3)
-const endRow = ref(13)
-const endColumn = ref(15)
+const endRow = ref(8)
+const endColumn = ref(20)
 
 //log wall positions
 const wallList = ref([])
@@ -218,7 +218,12 @@ function runMazeAlgo() {
     <button type="button" @click="runMazeAlgo">Generate Maze</button>
   </div>
   <div class="centered">
-    <div v-for="(row, rowIndex) in grid" :row="rowIndex" class="row centered" :width="(horizontalCount * 40)">
+    <div
+      v-for="(row, rowIndex) in grid"
+      :row="rowIndex"
+      class="row centered"
+      :width="horizontalCount * 40"
+    >
       <template v-for="(column, columnIndex) in row">
         <Node
           v-if="rowIndex === startRow && columnIndex === startColumn"
