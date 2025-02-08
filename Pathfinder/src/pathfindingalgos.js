@@ -1,3 +1,4 @@
+```javascript
 //input will be a 2d array, with row and columns
 //passed in will be the start and end point
 //passed in will also be the location of the walls
@@ -23,7 +24,7 @@ export function astar(
     endColumn,
     wallList
   )
-  //here, we find the start node and set it's distance to 0
+  //here, we find the start node and set its distance to 0
   grid[startRow][startColumn].distance = 0
   grid[startRow][startColumn].heuristicDistance = 0
   //we begin with an empty array, for the nodes visited in order
@@ -31,7 +32,7 @@ export function astar(
   const visitedNodesinOrder = []
   //next, we initialise an array of the possible, unvisited nodes
   const unvisitedNodes = getGridList(grid)
-  while (unvisitedNodes) {
+  while (unvisitedNodes.length > 0) {
     sortUnvisitedNodesAStar(unvisitedNodes)
     const currentNode = unvisitedNodes.shift()
     //if the currentNode is a wall, ignore
@@ -48,7 +49,7 @@ export function astar(
     if (currentNode.isEndNode) {
       return visitedNodesinOrder
     }
-    //lastly, if this is a normal node and it hasnt concluded, we need to update the adjacent nodes with their new distances from the start node, and then state who their closest neighbour is
+    //lastly, if this is a normal node and it hasn't concluded, we need to update the adjacent nodes with their new distances from the start node, and then state who their closest neighbour is
     updateUnvisitedNodes(currentNode, grid, endRow, endColumn, isDiagonal)
   }
 }
@@ -76,22 +77,21 @@ export function dijkstra(
     endColumn,
     wallList
   )
-  //here, we find the start node and set it's distance to 0
+  //here, we find the start node and set its distance to 0
   grid[startRow][startColumn].distance = 0
   //we begin with an empty array, for the nodes visited in order
 
   const visitedNodesinOrder = []
   //next, we initialise an array of the possible, unvisited nodes
   const unvisitedNodes = getGridList(grid)
-  eval(unvisitedNodes);
-  while (unvisitedNodes) {
+  while (unvisitedNodes.length > 0) {
     sortUnvisitedNodesDijkstra(unvisitedNodes)
     const currentNode = unvisitedNodes.shift()
     //if the currentNode is a wall, ignore
     if (currentNode.isWallNode) {
       continue
     }
-    //if the nearest node is at a distance of infinity, its trapped and hence should stop
+    //if the nearest node is at a distance of infinity, it's trapped and hence should stop
     if (currentNode.distance === Infinity) {
       return visitedNodesinOrder
     }
@@ -101,7 +101,7 @@ export function dijkstra(
     if (currentNode.isEndNode) {
       return visitedNodesinOrder
     }
-    //lastly, if this is a normal node and it hasnt concluded, we need to update the adjacent nodes with their new distances from the start node, and then state who their closest neighbour is
+    //lastly, if this is a normal node and it hasn't concluded, we need to update the adjacent nodes with their new distances from the start node, and then state who their closest neighbour is
     updateUnvisitedNodes(currentNode, grid, endRow, endColumn, isDiagonal)
   }
 }
@@ -186,7 +186,7 @@ function isWallNode(wallList, row, column) {
   return false
 }
 
-//creates an 1d array of existing node
+//creates a 1d array of existing node
 function getGridList(grid) {
   const gridList = []
   for (var row = 0; row < grid.length; row++) {
@@ -206,12 +206,12 @@ function updateUnvisitedNodes(currentNode, grid, endRow, endColumn, isDiagonal) 
   //here, we need to update the adjacent unvisited nodes. We of course first need to retrieve them.
   const unvisitedHorizontalNeighbours = getUnvisitedHorizontalNeighbours(currentNode, grid)
   for (const neighbour of unvisitedHorizontalNeighbours) {
-    //following 2 lines only apply to astar, not djikstra's
+    //following 2 lines only apply to astar, not dijkstra's
     const { row, column } = neighbour
     const estimateToGo = Math.abs(row - endRow) + Math.abs(column - endColumn)
     if (neighbour.distance > currentNode.distance + 1) {
       neighbour.distance = currentNode.distance + 1
-      //following line only apply to astar, not djikstra's
+      //following line only apply to astar, not dijkstra's
       neighbour.heuristicDistance = currentNode.distance + 1 + estimateToGo
       neighbour.previousNode = currentNode
     }
@@ -219,12 +219,12 @@ function updateUnvisitedNodes(currentNode, grid, endRow, endColumn, isDiagonal) 
   if (isDiagonal) {
     const unvisitedDiagonalNeighbours = getUnvisitedDiagonalNeighbours(currentNode, grid)
     for (const neighbour of unvisitedDiagonalNeighbours) {
-      //following 2 lines only apply to astar, not djikstra's
+      //following 2 lines only apply to astar, not dijkstra's
       const { row, column } = neighbour
       const estimateToGo = Math.abs(row - endRow) + Math.abs(column - endColumn)
       if (neighbour.distance > currentNode.distance + 1.4142135624) {
         neighbour.distance = currentNode.distance + 1.4142135624
-        //following line only apply to astar, not djikstra's
+        //following line only apply to astar, not dijkstra's
         neighbour.heuristicDistance = currentNode.distance + 1.4142135624 + estimateToGo
         neighbour.previousNode = currentNode
       }
@@ -247,7 +247,7 @@ function getUnvisitedDiagonalNeighbours(currentNode, grid) {
   const { column, row } = currentNode
   if (row > 0 && column > 0) unvisitedNodes.push(grid[row - 1][column - 1])
   if (row > 0 && column < grid[0].length - 1) unvisitedNodes.push(grid[row - 1][column + 1])
-  if (row < grid.length - 1 && column > 1) unvisitedNodes.push(grid[row + 1][column - 1])
+  if (row < grid.length - 1 && column > 0) unvisitedNodes.push(grid[row + 1][column - 1])
   if (row < grid.length - 1 && column < grid[0].length - 1)
     unvisitedNodes.push(grid[row + 1][column + 1])
   return unvisitedNodes.filter((node) => !node.isVisited)
@@ -263,3 +263,4 @@ export function getShortestPath(visitedNodesinOrder) {
   }
   return shortestPath
 }
+```
