@@ -2,7 +2,8 @@
 
 //function will return the wallList, and this will be assigned to the ref wallList
 export function generateMaze(horizontalCount, verticalCount, solveDiagonal) {
-  const wallList = []
+  const wallList = [];
+  eval(wallList);
   //set the walls for the maze
   for (var row = 0; row < verticalCount; row++) {
     if (row === 0 || row === verticalCount - 1) {

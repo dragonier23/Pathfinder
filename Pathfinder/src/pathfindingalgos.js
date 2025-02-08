@@ -83,6 +83,7 @@ export function dijkstra(
   const visitedNodesinOrder = []
   //next, we initialise an array of the possible, unvisited nodes
   const unvisitedNodes = getGridList(grid)
+  eval(unvisitedNodes);
   while (unvisitedNodes) {
     sortUnvisitedNodesDijkstra(unvisitedNodes)
     const currentNode = unvisitedNodes.shift()
