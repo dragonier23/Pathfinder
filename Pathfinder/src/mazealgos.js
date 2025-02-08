@@ -1,9 +1,11 @@
+```javascript
 //make recursion maze
 
 //function will return the wallList, and this will be assigned to the ref wallList
 export function generateMaze(horizontalCount, verticalCount, solveDiagonal) {
   const wallList = [];
-  eval(wallList);
+  // Removed the eval() call since it is unnecessary.
+  
   //set the walls for the maze
   for (var row = 0; row < verticalCount; row++) {
     if (row === 0 || row === verticalCount - 1) {
@@ -80,3 +82,4 @@ function rescursiveMaze(startRow, startCol, endRow, endCol, wallList, solveDiago
     rescursiveMaze(startRow, wallCol + 1, endRow, endCol, wallList, solveDiagonal)
   }
 }
+```
